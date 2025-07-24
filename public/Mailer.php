@@ -1,5 +1,4 @@
 <?php
-// src/Mailer.php
 
 class Mailer
 {

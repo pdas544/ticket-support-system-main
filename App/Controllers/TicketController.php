@@ -13,6 +13,7 @@ class TicketController
 
     private $ticketModel;
     private $userModel;
+    private $notificationController;
 
     public function __construct()
     {
@@ -149,6 +150,13 @@ class TicketController
              * Step 2:
              * 
              */
+            $this->notificationController = new NotificationController();
+            $response = $this->notificationController->send(
+                $email,
+                'Ticket Created Successfully',
+                "Thank you for Raising a ticket. Your Ticket ID is {$ticketId}. We will get back to you soon.",
+                $username
+            );
 
             Session::setFlashMessage('success', "Thank You. Your Ticket ID is $ticketId. An Email has been sent with the ticket details");
             header("Location: /tickets/create");

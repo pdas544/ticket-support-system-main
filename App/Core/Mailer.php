@@ -2,55 +2,41 @@
 
 namespace App\Core;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-
-
 class Mailer
 {
-    protected $mailer;
 
-    public function __construct()
+    public function __construct(private string $phpBin, private string $script)
     {
-        $emailConfig = require __DIR__ . '/../../config/email.php';
-        $this->mailer = new PHPMailer(true);
-
-        // Use Gmail SMTP server settings.
-        $this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;
-        $this->mailer->isSMTP();
-        $this->mailer->Host       = $emailConfig['host'];
-        $this->mailer->SMTPAuth   = true;
-        $this->mailer->Username   = $emailConfig['username'];        // Replace with your Gmail address.
-        $this->mailer->Password   = $emailConfig['password'];            // Replace with your Gmail app password.
-        $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;   // Use TLS encryption.
-        $this->mailer->Port       = $emailConfig['port'];
-
-        // Set a sender. Using the same Gmail account.
-        $this->mailer->setFrom($emailConfig['username'], 'Notification from IT Department');
+        $this->phpBin  = $phpBin;
+        $this->script  = $script;
     }
 
-    /**
-     * Sends an email.
-     *
-     * @param string $to      Recipient email address.
-     * @param string $subject Email subject.
-     * @param string $body    Email body as HTML.
-     *
-     * @return bool Returns true on success, false on failure.
-     */
-    public function sendMail(string $to, string $subject, string $body): bool
+    public function sendAsync(string $to, string $subject, string $body, string $name = ''): void
     {
-        try {
-            $this->mailer->clearAddresses();
-            $this->mailer->addAddress($to);
-            $this->mailer->Subject = $subject;
-            $this->mailer->Body    = $body;
-            $this->mailer->send();
-            return true;
-        } catch (Exception $e) {
-            error_log('MailService Error: ' . $e->getMessage());
-            return false;
-        }
+        // 1. Prepare payload
+        $payload = json_encode([
+            'to'      => $to,
+            'name'    => $name,
+            'subject' => $subject,
+            'body'    => $body,
+        ]);
+
+        // 2. Temp file
+        $tmpDir  = sys_get_temp_dir();
+        $tmpFile = $tmpDir . DIRECTORY_SEPARATOR . 'mail_' . uniqid() . '.json';
+        file_put_contents($tmpFile, $payload);
+
+        // 3. Build Windows start command
+        //    - "" is a dummy window title
+        //    - Wrap paths in quotes to handle spaces
+        $cmd = sprintf(
+            'start /B "" "%s" "%s" "%s"',
+            $this->phpBin,
+            $this->script,
+            $tmpFile
+        );
+
+
+        pclose(popen($cmd, 'r'));
     }
 }

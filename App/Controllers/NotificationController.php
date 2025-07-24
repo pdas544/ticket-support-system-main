@@ -6,15 +6,17 @@ use App\Core\Mailer;
 
 class NotificationController
 {
-    private $notification;
+    private $mailer;
+    private $phpBin = 'php.exe';
+    private $script = __DIR__ . '/../Core/SendMail.php';
 
     public function __construct()
     {
-        $this->notification = new Mailer();
+        $this->mailer = new Mailer($this->phpBin, $this->script);
     }
-    public function send()
+    public function send($to, $subject, $body, $name = '')
     {
-        $response = $this->notification->sendMail('priyabrata.das@nift.ac.in', 'Test Subject', 'This is a test email');
+        $response = $this->mailer->sendAsync($to, $subject, $body, $name);
 
         return $response;
     }
