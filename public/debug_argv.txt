@@ -1,5 +1,0 @@
-Array
-(
-    [0] => C:\xampp\htdocs\Ticket\public/sendmail.php
-    [1] => { to : pdas544@gmail.com , name : New User , subject : Welcome to Our Site , body : Thanks for signing up  }
-)

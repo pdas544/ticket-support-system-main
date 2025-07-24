@@ -20,6 +20,7 @@ class TicketController
         // $this->view = $view;
         $this->ticketModel = new Ticket();
         $this->userModel = new User(); // Initialize user model if needed
+        $this->notificationController = new NotificationController();
     }
 
     /**
@@ -81,7 +82,7 @@ class TicketController
                 'ticket' => $ticket
             ]);
         } catch (\Exception $e) {
-            ErrorController::notFound("Ticket with ID {$id} not found.");
+            ErrorController::notFound("Ticket with ID $id not found.");
         }
     }
 
@@ -147,14 +148,14 @@ class TicketController
              * 1) Use the NotificationController to send an email to the user
              * 
              * Step 1: Use $email and $username to send an email
-             * Step 2:
+             * Step 2: Call the send() method of NotificationController
              * 
              */
-            $this->notificationController = new NotificationController();
-            $response = $this->notificationController->send(
+
+            $this->notificationController->send(
                 $email,
-                'Ticket Created Successfully',
-                "Thank you for Raising a ticket. Your Ticket ID is {$ticketId}. We will get back to you soon.",
+                "Ticket Created Successfully with Ticket ID $ticketId",
+                "Dear Sir/Madam,\n\nThank you for contacting the IT Support Desk. Brief Summary of the issue is as follow: \n\n Ticket ID: $ticketId \n Description: $description \n\n\n The issue is being processed and you can check the ticket status using the 'View Ticket Status' option in the portal. \n\n\n\n Regards, \n IT Department, NIFT Bhubaneswar",
                 $username
             );
 

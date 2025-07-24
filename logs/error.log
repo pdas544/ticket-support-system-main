@@ -1,0 +1,31 @@
+[2025-07-24 15:08:46] INFO: Starting background email process: {"to":"test@example.com","subject":"Test Email - 2025-07-24 15:08:46","script":"C:\\xampp\\htdocs\\Ticket\\App\\Controllers\/..\/Core\/SendMail.php"}
+[2025-07-24 15:08:46] INFO: Starting background email process: {"to":"invalid-email","subject":"Test Email with Invalid Recipient","script":"C:\\xampp\\htdocs\\Ticket\\App\\Controllers\/..\/Core\/SendMail.php"}
+[2025-07-24 15:08:46] INFO: Starting background email process: {"to":"test@example.com","subject":"Test Email with Invalid Script Path","script":"C:\\xampp\\htdocs\\Ticket\\public\/non_existent_script.php"}
+[2025-07-24 15:08:46] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-24 15:08:46] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-24 15:08:46] ERROR: Failed to send email: {
+    "recipient": "invalid-email",
+    "subject": "Test Email with Invalid Recipient",
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587,
+    "smtp_user": "itdeskbbsr@gmail.com",
+    "error_code": "Invalid address:  (to): invalid-email",
+    "error_message": "Invalid address:  (to): invalid-email",
+    "error_trace": [
+        "#0 C:\\xampp\\htdocs\\Ticket\\vendor\\phpmailer\\phpmailer\\src\\PHPMailer.php(1020): PHPMailer\\PHPMailer\\PHPMailer->addOrEnqueueAnAddress('to', 'invalid-email', 'Test User')",
+        "#1 C:\\xampp\\htdocs\\Ticket\\App\\Core\\SendMail.php(81): PHPMailer\\PHPMailer\\PHPMailer->addAddress('invalid-email', 'Test User')",
+        "#2 {main}"
+    ]
+}
+[2025-07-24 15:08:52] INFO: Email sent successfully to: test@example.com, Subject: Test Email - 2025-07-24 15:08:46
+[2025-07-24 17:11:59] INFO: Starting background email process: {"to":"priyabrata.das@nift.ac.in","subject":"Ticket Created Successfully with Ticket ID 18","script":"C:\\xampp\\htdocs\\Ticket\\App\\Controllers\/..\/Core\/SendMail.php"}
+[2025-07-24 15:12:00] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-24 15:12:06] INFO: Email sent successfully to: priyabrata.das@nift.ac.in, Subject: Ticket Created Successfully with Ticket ID 18
+[2025-07-24 16:12:26] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-24 16:12:32] INFO: Email sent successfully to: priyabrata.das@nift.ac.in, Subject: Ticket Created Successfully with Ticket ID 19
+[2025-07-24 16:16:11] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-24 16:16:17] INFO: Email sent successfully to: priyabrata.das@nift.ac.in, Subject: Ticket Created Successfully with Ticket ID 20
+[2025-07-24 16:20:02] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-24 16:20:08] INFO: Email sent successfully to: priyabrata.das@nift.ac.in, Subject: Ticket Created Successfully with Ticket ID 21
+[2025-07-24 16:21:13] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-24 16:21:18] INFO: Email sent successfully to: priyabrata.das@nift.ac.in, Subject: Ticket Created Successfully with Ticket ID 22
