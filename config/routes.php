@@ -68,18 +68,20 @@ $router->map('POST', '/tickets', [
 $router->map('GET', '/register', [
     'controller' => 'App\Controllers\UserController',
     'action'     => 'create',
+    'middleware' => ['guest']
 ], 'create_user');
 
 $router->map('POST', '/register', [
     'controller' => 'App\Controllers\UserController',
     'action'     => 'store',
+
 ], 'store_user');
 
 
 $router->map('GET', '/auth/login', [
     'controller' => '\App\Controllers\UserController',
     'action'     => 'login',
-
+    'middleware' => ['guest']
 ], 'login');
 
 

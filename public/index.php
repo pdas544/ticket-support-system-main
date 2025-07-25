@@ -8,6 +8,7 @@ use App\Controllers\ErrorController;
 use App\Core\Session;
 use App\Middleware\AdminMiddleware;
 use App\Middleware\AuthMiddleware;
+use App\Middleware\GuestMiddleware;
 
 
 Session::start();
@@ -17,7 +18,8 @@ require '../helpers.php';
 // Middleware mapping configuration
 $middlewareMap = [
     'auth'  => AuthMiddleware::class,
-    'admin' => AdminMiddleware::class
+    'admin' => AdminMiddleware::class,
+    'guest' => GuestMiddleware::class
 ];
 
 //load the routes and initialize the router
