@@ -108,7 +108,7 @@ class NotificationController
     {
         $timestamp = date('Y-m-d H:i:s');
         $errorMessage = "[$timestamp] ERROR: $message: " . json_encode($context) . "\n";
-        file_put_contents(__DIR__ . $this->errorLogPath, $errorMessage, FILE_APPEND);
+        file_put_contents($this->errorLogPath, $errorMessage, FILE_APPEND);
     }
     
     /**
@@ -121,6 +121,6 @@ class NotificationController
     {
         $timestamp = date('Y-m-d H:i:s');
         $infoMessage = "[$timestamp] INFO: $message: " . json_encode($context) . "\n";
-        file_put_contents(__DIR__ . $this->errorLogPath, $infoMessage, FILE_APPEND);
+        file_put_contents($this->errorLogPath, $infoMessage, FILE_APPEND);
     }
 }

@@ -29,3 +29,9 @@
 [2025-07-24 16:20:08] INFO: Email sent successfully to: priyabrata.das@nift.ac.in, Subject: Ticket Created Successfully with Ticket ID 21
 [2025-07-24 16:21:13] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
 [2025-07-24 16:21:18] INFO: Email sent successfully to: priyabrata.das@nift.ac.in, Subject: Ticket Created Successfully with Ticket ID 22
+[2025-07-25 16:57:44] INFO: Starting background email process: {"to":"pdas544@gmail.com","subject":"Ticket Created Successfully with Ticket ID 25","script":"C:\\xampp\\htdocs\\Ticket\\App\\Controllers\/..\/Core\/SendMail.php"}
+[2025-07-25 14:57:44] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-25 14:57:50] INFO: Email sent successfully to: pdas544@gmail.com, Subject: Ticket Created Successfully with Ticket ID 25
+[2025-07-25 17:04:28] INFO: Starting background email process: {"to":"pdas544@gmail.com","subject":"Ticket Created Successfully with Ticket ID 26","script":"C:\\xampp\\htdocs\\Ticket\\App\\Controllers\/..\/Core\/SendMail.php"}
+[2025-07-25 15:04:28] INFO: Attempting to connect to SMTP server: smtp.gmail.com:587
+[2025-07-25 15:04:34] INFO: Email sent successfully to: pdas544@gmail.com

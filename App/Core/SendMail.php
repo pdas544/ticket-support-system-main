@@ -18,7 +18,7 @@ $tmpFile = $argv[1] ?? '';
 if (! is_file($tmpFile) || ! is_readable($tmpFile)) {
     $timestamp = date('Y-m-d H:i:s');
     $errorMessage = "[$timestamp] ERROR: Missing or unreadable file: $tmpFile\n";
-    file_put_contents(__DIR__ . $errorLogPath, $errorMessage, FILE_APPEND);
+    file_put_contents($errorLogPath, $errorMessage, FILE_APPEND);
     exit(1);
 }
 
@@ -33,7 +33,7 @@ $data = json_decode($json, true);
 if (! $data) {
     $timestamp = date('Y-m-d H:i:s');
     $errorMessage = "[$timestamp] ERROR: Invalid JSON in file: $tmpFile\n";
-    file_put_contents(__DIR__ . $errorLogPath, $errorMessage, FILE_APPEND);
+    file_put_contents($errorLogPath, $errorMessage, FILE_APPEND);
     exit(1);
 }
 
@@ -51,7 +51,7 @@ foreach ($requiredFields as $field) {
 if (!empty($missingFields)) {
     $timestamp = date('Y-m-d H:i:s');
     $errorMessage = "[$timestamp] ERROR: Missing required fields in email data: " . implode(', ', $missingFields) . "\n";
-    file_put_contents(__DIR__ . $errorLogPath, $errorMessage, FILE_APPEND);
+    file_put_contents($errorLogPath, $errorMessage, FILE_APPEND);
     exit(1);
 }
 
@@ -76,7 +76,7 @@ try {
     // Log connection attempt
     $timestamp = date('Y-m-d H:i:s');
     $logMessage = "[$timestamp] INFO: Attempting to connect to SMTP server: {$emailConfig['host']}:{$emailConfig['port']}\n";
-    file_put_contents(__DIR__ . $errorLogPath, $logMessage, FILE_APPEND);
+    file_put_contents($errorLogPath, $logMessage, FILE_APPEND);
 
     $mail->setFrom("it.bhubaneswar@nift.ac.in", "IT Support Desk");
     $mail->addAddress($recipientEmail, $name);
@@ -89,8 +89,8 @@ try {
     
     // Log successful email sending
     $timestamp = date('Y-m-d H:i:s');
-    $successMessage = "[$timestamp] INFO: Email sent successfully to: $recipientEmail, Subject: $subject\n";
-    file_put_contents(__DIR__ . $errorLogPath, $successMessage, FILE_APPEND);
+    $successMessage = "[$timestamp] INFO: Email sent successfully to: $recipientEmail\n";
+    file_put_contents($errorLogPath, $successMessage, FILE_APPEND);
     
     exit(0);
 } catch (Exception $e) {
@@ -106,7 +106,7 @@ try {
         'error_trace' => array_slice(explode("\n", $e->getTraceAsString()), 0, 3)
     ];
     $errorMessage = "[$timestamp] ERROR: Failed to send email: " . json_encode($errorContext, JSON_PRETTY_PRINT) . "\n";
-    file_put_contents(__DIR__ . $errorLogPath, $errorMessage, FILE_APPEND);
+    file_put_contents($errorLogPath, $errorMessage, FILE_APPEND);
     
     // Also log to PHP error log for system-level visibility
     error_log("Email sending failed: " . $e->getMessage());
