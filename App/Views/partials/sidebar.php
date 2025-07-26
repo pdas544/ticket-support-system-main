@@ -20,12 +20,12 @@
                 <a href="#" class="nav-link d-flex align-items-center justify-content-between" 
                    data-bs-toggle="collapse" data-bs-target="#submenu" 
                    aria-expanded="false" aria-controls="submenu">
-                    <div>
+
                         <span class="icon me-3">
                             <i class="bi bi-clipboard-check"></i>
                         </span>
                         <span class="description">Tickets</span>
-                    </div>
+
                     <span class="ms-auto">
                         <i class="bi bi-caret-down-fill"></i>
                     </span>
