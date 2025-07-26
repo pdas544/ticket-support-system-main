@@ -2,27 +2,33 @@
 
 namespace App\Core;
 
-use mysqli;
-use mysqli_sql_exception;
+use App\Controllers\ErrorController;
+use PDO;
+use PDOException;
 
 class Database
 {
     private static $instance = null;
-    private $connection;
+    private PDO $connection;
 
     private function __construct()
     {
-
         $config = require __DIR__ . '/../../config/db.php';
 
         try {
-            $this->connection = new mysqli(
-                $config['host'],
+            $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};charset=utf8mb4";
+            $options = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ];
+            
+            $this->connection = new PDO(
+                $dsn,
                 $config['username'],
                 $config['password'],
-                $config['dbname']
+                $options
             );
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             // Handle connection error
             /**
              * Display a user-friendly error message
@@ -30,6 +36,7 @@ class Database
              * 
              */
             //redirect to a custom error page
+            ErrorController::notFound('Database connection failed');
 
             //Log the error message in json format
             $errorData = [
@@ -40,12 +47,7 @@ class Database
             ];
             //convert the error data to JSON
             $errorJson = json_encode($errorData, JSON_PRETTY_PRINT);
-            // Ensure the logs directory exists
-            /*if (!is_dir(__DIR__ . '/../logs')) {
-                mkdir(__DIR__ . '/../logs', 0755, true);
-            }*/
             // Log the error message to a file
-
             error_log("\n" . $errorJson, 3, __DIR__ . '/../../logs/error.log');
             exit;
         }

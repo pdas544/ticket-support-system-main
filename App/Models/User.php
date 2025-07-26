@@ -17,19 +17,15 @@ class User extends BaseModel
     // }
     public function checkEmailExists($email)
     {
-
-        $stmt = $this->db->prepare("SELECT id FROM {$this->table} WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        return $stmt->get_result()->num_rows > 0;
+        $stmt = $this->query("SELECT id FROM {$this->table} WHERE email = ?", [$email]);
+        $result = $this->fetch($stmt);
+        return $result !== false;
     }
 
     public function getUserByEmail($email)
     {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        $stmt = $this->query("SELECT * FROM {$this->table} WHERE email = ?", [$email]);
+        return $this->fetch($stmt);
     }
 
 
@@ -41,13 +37,11 @@ class User extends BaseModel
         }
 
         // Insert user
-
-        $stmt = $this->db->prepare("INSERT INTO {$this->table} (name, email, password, user_type) VALUES (?, ?, ?,?)");
-        $stmt->bind_param("ssss", $name, $email, $password, $userType);
-
+        $sql = "INSERT INTO {$this->table} (name, email, password, user_type) VALUES (?, ?, ?, ?)";
+        
         try {
-            $stmt->execute();
-            return $stmt;
+            $this->query($sql, [$name, $email, $password, $userType]);
+            return $this->lastInsertId();
         } catch (\Exception $e) {
             Session::setFlashMessage('error', 'User Creation Failed');
             redirect('/');

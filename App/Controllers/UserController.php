@@ -213,6 +213,7 @@ class UserController
     //check if the Session exists
     if (Session::has('user')) {
       $role = Session::get('user')['role'];
+      $userId = Session::get('user')['id'];
       switch ($role) {
         case 'admin':
           $stats = [
@@ -221,13 +222,16 @@ class UserController
             'pending' => $this->ticketModel->getPendingTickets(),
             'resolved' => $this->ticketModel->getResolvedTickets()
           ];
-          loadView('/dashboard/admin', ['stats' => $stats, 'role' => Session::get('user')['role']]);
+          loadView('/dashboard/admin', ['stats' => $stats, 'role' => $role]);
           break;
         case 'agent':
           loadView('/dashboard/agent');
           break;
         case 'guest':
-          loadView('/dashboard/user');
+            $stats = [
+                'total_by_user' => $this->ticketModel->getTicketsByUserId($userId),
+            ];
+          loadView('/dashboard/user', ['stats' => $stats, 'role' => $role]);;
           break;
         default:
           ErrorController::unauthorized();

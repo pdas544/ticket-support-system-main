@@ -20,8 +20,8 @@ class Ticket extends BaseModel
 
         $insertedId = '';
         try {
-            $stmt = $this->query($sql, [$user_id, $subject, $description]);
-            $insertedId = $stmt->insert_id;
+            $this->query($sql, [$user_id, $subject, $description]);
+            $insertedId = $this->lastInsertId();
         } catch (\Exception $e) {
             Session::setFlashMessage('error', 'Ticket Creation Failed');
         }
@@ -31,47 +31,48 @@ class Ticket extends BaseModel
     public function getAll(): array
     {
         $stmt = $this->query("SELECT * FROM {$this->table}");
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return $this->fetchAll($stmt);
     }
 
     public function getById($id)
     {
         $stmt = $this->query("SELECT * FROM {$this->table} WHERE id = ?", [$id]);
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        return $this->fetch($stmt);
     }
 
     public function getTotalTickets()
     {
         $stmt = $this->query("SELECT COUNT(*) AS total FROM {$this->table}");
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
+        $row = $this->fetch($stmt);
         return $row['total'];
     }
 
     public function getTicketsRaisedToday()
     {
         $stmt = $this->query("SELECT COUNT(*) AS total_raised_today FROM {$this->table} WHERE DATE(created_at) = CURDATE()");
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
+        $row = $this->fetch($stmt);
         return $row['total_raised_today'];
     }
 
     public function getPendingTickets()
     {
         $stmt = $this->query("SELECT COUNT(*) AS total_pending FROM {$this->table} WHERE status IN ('open', 'in-progress')");
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
+        $row = $this->fetch($stmt);
         return $row['total_pending'];
     }
 
     public function getResolvedTickets()
     {
         $stmt = $this->query("SELECT COUNT(*) AS total_resolved FROM {$this->table} WHERE status = 'resolved'");
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
+        $row = $this->fetch($stmt);
         return $row['total_resolved'];
+    }
+
+    public function getTicketsByUserId($user_id)
+    {
+        $stmt = $this->query("SELECT COUNT(*) as total_by_user FROM {$this->table} WHERE user_id = ?", [$user_id]);
+        $row = $this->fetch($stmt);
+        return $row['total_by_user'];
     }
 
 
