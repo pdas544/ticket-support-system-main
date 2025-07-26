@@ -8,9 +8,14 @@
 ) ?>
 <?php loadPartial('navbar'); ?>
 <?php loadPartial('message'); ?>
-<?php loadPartial('sidebar'); ?>
 
-<div class="container mt-5 main-content">
+<!-- Wrapper for sidebar and main content -->
+<div class="d-flex">
+    <!-- Include sidebar -->
+    <?php loadPartial('sidebar'); ?>
+    
+    <!-- Main content -->
+    <div class="container mt-5 main-content">
 
     <h2 class="mb-5 text-center">Ticket Statistics</h2>
     <div class="row d-flex justify-content-center">
@@ -40,5 +45,6 @@
         </div>
     </div>
 </div>
+</div> <!-- Close d-flex wrapper -->
 
 <?php loadPartial('footer'); ?>
