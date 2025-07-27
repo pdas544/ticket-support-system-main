@@ -46,9 +46,15 @@ class TicketController
 
     public function create()
     {
+        $user = Session::get('user');
 
+        // Check if user is an agent and deny access
+        if (isset($user['role']) && $user['role'] === 'agent') {
+            ErrorController::unauthorized();
+            exit;
+        }
         loadView('tickets/create');
-        // echo "inside create function";
+
     }
 
     public function showStatusForm()
