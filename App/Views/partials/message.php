@@ -70,7 +70,7 @@ if ($flash && $flashType):
             //set the timeout to auto-hide the modal
             setTimeout(() => {
                 modal.hide();
-            }, 1000);
+            }, 2000);
         });
     </script>
 <?php

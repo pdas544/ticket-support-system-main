@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Core\Security;
 use App\Core\Session;
 use App\Models\BaseModel;
+use PDO;
 
 class User extends BaseModel
 {
@@ -15,16 +16,19 @@ class User extends BaseModel
     // public function __construct() {
     //     $this->db = Database::getInstance();
     // }
-    public function checkEmailExists($email)
-    {
-        $stmt = $this->query("SELECT id FROM {$this->table} WHERE email = ?", [$email]);
-        $result = $this->fetch($stmt);
-        return $result !== false;
-    }
+//    public function checkEmailExists($email)
+//    {
+//        $stmt = $this->query("SELECT id FROM {$this->table} WHERE email = ?", [$email]);
+//        $result = $this->fetch($stmt);
+//        return $result !== false;
+//    }
 
     public function getUserByEmail($email)
     {
-        $stmt = $this->query("SELECT * FROM {$this->table} WHERE email = ?", [$email]);
+        $params = [
+            'email' => [$email,PDO::PARAM_STR],
+        ];
+        $stmt = $this->query("SELECT * FROM {$this->table} WHERE email = :email", $params);
         return $this->fetch($stmt);
     }
 
@@ -32,15 +36,23 @@ class User extends BaseModel
     public function register($name, $email, $password = "", $userType = 'registered')
     {
         // Check if email exists
-        if ($this->checkEmailExists($email)) {
+        if ($this->getUserByEmail($email)) {
             return false;
         }
 
+
+
         // Insert user
-        $sql = "INSERT INTO {$this->table} (name, email, password, user_type) VALUES (?, ?, ?, ?)";
+        $params = [
+          'name'=> [$name,PDO::PARAM_STR],
+          'email'=> [$email,PDO::PARAM_STR],
+          'password'=> [$password,PDO::PARAM_STR],
+          'user_type'=> [$userType,PDO::PARAM_STR],
+        ];
+        $sql = "INSERT INTO {$this->table} (name, email, password, user_type) VALUES (:name, :email, :password, :user_type)";
         
         try {
-            $this->query($sql, [$name, $email, $password, $userType]);
+            $this->query($sql, $params);
             return $this->lastInsertId();
         } catch (\Exception $e) {
             Session::setFlashMessage('error', 'User Creation Failed');

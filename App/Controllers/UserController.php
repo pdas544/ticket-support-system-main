@@ -93,7 +93,7 @@ class UserController
     }
 
 
-    $user = $this->userModel->checkEmailExists($email);
+    $user = $this->userModel->getUserByEmail($email);
 
     if ($user) {
       $errors['email'] = 'Email already exists. Kindly Login';

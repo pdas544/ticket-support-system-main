@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Controllers\ErrorController;
 use App\Models\BaseModel;
 use App\Core\Session;
+use PDO;
 
 class Ticket extends BaseModel
 {
@@ -16,11 +17,17 @@ class Ticket extends BaseModel
     public function create($user_id, $subject, $description): int
     {
         $sql = "INSERT INTO {$this->table} (user_id,subject,description)
-                VALUES (?, ?, ?)";
+                VALUES (:user_id, :subject, :description)";
+
+        $params = [
+            'user_id' => [$user_id,PDO::PARAM_INT],
+            'subject' => [$subject,PDO::PARAM_STR],
+            'description' => [$description,PDO::PARAM_STR],
+        ];
 
         $insertedId = '';
         try {
-            $this->query($sql, [$user_id, $subject, $description]);
+            $this->query($sql, $params);
             $insertedId = $this->lastInsertId();
         } catch (\Exception $e) {
             Session::setFlashMessage('error', 'Ticket Creation Failed');
@@ -36,7 +43,10 @@ class Ticket extends BaseModel
 
     public function getById($id)
     {
-        $stmt = $this->query("SELECT * FROM {$this->table} WHERE id = ?", [$id]);
+        $params = [
+            'id' => [$id,PDO::PARAM_INT],
+        ];
+        $stmt = $this->query("SELECT * FROM {$this->table} WHERE id = :id", $params);
         return $this->fetch($stmt);
     }
 
@@ -49,6 +59,7 @@ class Ticket extends BaseModel
 
     public function getTicketsRaisedToday()
     {
+
         $stmt = $this->query("SELECT COUNT(*) AS total_raised_today FROM {$this->table} WHERE DATE(created_at) = CURDATE()");
         $row = $this->fetch($stmt);
         return $row['total_raised_today'];
@@ -70,7 +81,10 @@ class Ticket extends BaseModel
 
     public function getTicketsByUserId($user_id)
     {
-        $stmt = $this->query("SELECT COUNT(*) as total_by_user FROM {$this->table} WHERE user_id = ?", [$user_id]);
+        $params = [
+            'user_id' => [$user_id,PDO::PARAM_INT],
+        ];
+        $stmt = $this->query("SELECT COUNT(*) as total_by_user FROM {$this->table} WHERE user_id = :user_id", $params);
         $row = $this->fetch($stmt);
         return $row['total_by_user'];
     }

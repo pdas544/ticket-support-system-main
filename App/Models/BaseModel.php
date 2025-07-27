@@ -17,12 +17,19 @@ abstract class BaseModel {
         try {
             $stmt = $this->db->prepare($sql);
             
+//            if (!empty($params)) {
+//                foreach ($params as $key => $value) {
+//                    // PDO uses 1-based indexing for positional parameters
+//                    $paramIndex = is_numeric($key) ? $key + 1 : $key;
+//                    $stmt->bindValue($paramIndex, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+//                }
+//            }
+
             if (!empty($params)) {
-                foreach ($params as $key => $value) {
-                    // PDO uses 1-based indexing for positional parameters
-                    $paramIndex = is_numeric($key) ? $key + 1 : $key;
-                    $stmt->bindValue($paramIndex, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+                foreach ($params as $key => [$value, $type]) {
+                    $stmt->bindValue(":$key", $value, $type);
                 }
+
             }
             
             $stmt->execute();
