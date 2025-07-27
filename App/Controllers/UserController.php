@@ -225,7 +225,13 @@ class UserController
           loadView('/dashboard/admin', ['stats' => $stats, 'role' => $role]);
           break;
         case 'agent':
-          loadView('/dashboard/agent');
+            $stats = [
+                'total' => $this->ticketModel->getTotalTickets(),
+                'today' => $this->ticketModel->getTicketsRaisedToday(),
+                'pending' => $this->ticketModel->getPendingTickets(),
+                'resolved' => $this->ticketModel->getTicketsByAgentId($userId),
+            ];
+          loadView('/dashboard/agent', ['stats' => $stats, 'role' => $role]);
           break;
         case 'guest':
             $stats = [

@@ -15,6 +15,12 @@
             </div>
 
         </div>
+        <div class="row m-5 justify-content-center">
+            <div class="col-3">
+                <a href="/dashboard" class="btn btn-primary">Return to Dashboard</a>
+            </div>
+
+        </div>
 
 
 
