@@ -89,5 +89,15 @@ class Ticket extends BaseModel
         return $row['total_by_user'];
     }
 
+    public function getTicketsByAgentId($agent_id)
+    {
+        $params = [
+            'agent_id' => [$agent_id,PDO::PARAM_INT],
+        ];
+        $stmt = $this->query("SELECT COUNT(*) as total_by_agent FROM {$this->table} WHERE agent_id = :agent_id", $params);
+        $row = $this->fetch($stmt);
+        return $row['total_by_agent'];
+    }
+
 
 }

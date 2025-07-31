@@ -18,26 +18,26 @@
     <div class="container mt-5 main-content">
 
     <h2 class="mb-5 text-center">Ticket Statistics</h2>
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-3 total-tickets">
+    <div class="row d-flex justify-content-evenly">
+        <div class="col-md-2 total-tickets">
             <div class="card">
                 <div class="card-header">Total Tickets</div>
                 <div class="card-body"><?php echo $stats['total'] ?? ""; ?></div>
             </div>
         </div>
-        <div class="col-md-3 today-tickets">
+        <div class="col-md-2 today-tickets">
             <div class="card">
                 <div class="card-header">Tickets Raised Today</div>
                 <div class="card-body"><?php echo $stats['today'] ?? ""; ?></div>
             </div>
         </div>
-        <div class="col-md-3 pending-tickets">
+        <div class="col-md-2 pending-tickets">
             <div class="card">
                 <div class="card-header">Pending Tickets</div>
                 <div class="card-body"><?php echo $stats['pending'] ?? ""; ?></div>
             </div>
         </div>
-        <div class="col-md-3 resolved-tickets">
+        <div class="col-md-2 resolved-tickets">
             <div class="card">
                 <div class="card-header">Resolved Tickets</div>
                 <div class="card-body"><?php echo $stats['resolved'] ?? ""; ?></div>

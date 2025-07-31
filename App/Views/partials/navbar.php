@@ -27,26 +27,26 @@ use App\Core\Session;
                     </li>
                     <?php if (isset(Session::get('user')['role']) && Session::get('user')['role'] === 'admin'): ?>
                         <!-- Admin Drop Down menu -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Ticket
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/admin/tickets/create">Raise Ticket</a></li>
-                                <li><a class="dropdown-item" href="/tickets">View All Tickets</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Users
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/users">View Users</a></li>
-
-                            </ul>
-                        </li>
+<!--                        <li class="nav-item dropdown">-->
+<!--                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"-->
+<!--                                data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                                Ticket-->
+<!--                            </a>-->
+<!--                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--                                <li><a class="dropdown-item" href="/admin/tickets/create">Raise Ticket</a></li>-->
+<!--                                <li><a class="dropdown-item" href="/tickets">View All Tickets</a></li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item dropdown">-->
+<!--                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"-->
+<!--                                data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                                Users-->
+<!--                            </a>-->
+<!--                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--                                <li><a class="dropdown-item" href="/users">View Users</a></li>-->
+<!---->
+<!--                            </ul>-->
+<!--                        </li>-->
                     <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="/auth/logout">Logout</a>

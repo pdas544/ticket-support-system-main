@@ -16,20 +16,20 @@
     <!-- Main content -->
     <div class="container mt-5 main-content">
         <h2 class="mb-5 text-center">My Tickets Overview</h2>
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-4 total-tickets">
+        <div class="row d-flex justify-content-evenly">
+            <div class="col-md-2 total-tickets">
                 <div class="card">
                     <div class="card-header">My Total Tickets</div>
                     <div class="card-body"><?php echo $stats['total_by_user'] ?? "0"; ?></div>
                 </div>
             </div>
-            <div class="col-md-4 pending-tickets">
+            <div class="col-md-2 pending-tickets">
                 <div class="card">
                     <div class="card-header">My Pending Tickets</div>
                     <div class="card-body"><?php echo $stats['pending'] ?? "0"; ?></div>
                 </div>
             </div>
-            <div class="col-md-4 resolved-tickets">
+            <div class="col-md-2 resolved-tickets">
                 <div class="card">
                     <div class="card-header">My Resolved Tickets</div>
                     <div class="card-body"><?php echo $stats['resolved'] ?? "0"; ?></div>
