@@ -1,0 +1,325 @@
+# Additional DataTables Features and Improvements
+
+Here are some additional features and improvements that could enhance your ticket management system using DataTables capabilities:
+
+## 1. Advanced Filtering and Search
+
+### Custom Filtering
+Add dropdown filters for specific columns like Status and Assigned To:
+
+```javascript
+// Add filter dropdowns above the table
+$('#ticketsTable thead tr').clone(true).addClass('filters').appendTo('#ticketsTable thead');
+
+// Initialize DataTables with searchable filters
+$('#ticketsTable').DataTable({
+    orderCellsTop: true,
+    fixedHeader: true,
+    initComplete: function () {
+        var api = this.api();
+        
+        // For each column
+        api.columns().eq(0).each(function (colIdx) {
+            // Set the header cell to contain the input element
+            var cell = $('.filters th').eq($(api.column(colIdx).header()).index());
+            var title = $(cell).text();
+            
+            // Only add filter to specific columns (Status, Assigned To)
+            if (title === 'Status' || title === 'Assigned To') {
+                $(cell).html('<select class="form-select"><option value="">All</option></select>');
+                
+                // Get unique values for this column
+                api.column(colIdx).data().unique().sort().each(function (d, j) {
+                    $('.filters th').eq(colIdx).find('select').append('<option value="'+d+'">'+d+'</option>');
+                });
+                
+                // Apply the filter
+                $('select', $('.filters th').eq(colIdx)).on('change', function () {
+                    api.column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
+            } else if (title !== 'Action' && title !== 'Select' && title !== 'Sl. No') {
+                // Add text input for other searchable columns
+                $(cell).html('<input type="text" class="form-control" placeholder="Search '+title+'" />');
+                
+                // Apply the search
+                $('input', $('.filters th').eq(colIdx)).on('keyup change', function () {
+                    api.column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
+            } else {
+                $(cell).html('');
+            }
+        });
+    }
+});
+```
+
+## 2. Bulk Actions
+
+Add functionality to perform actions on multiple selected tickets:
+
+```html
+<!-- Add this above the table -->
+<div class="bulk-actions mb-3">
+    <div class="d-flex">
+        <select id="bulkAction" class="form-select me-2" style="width: auto;">
+            <option value="">Bulk Actions</option>
+            <option value="assign">Assign to Agent</option>
+            <option value="status">Change Status</option>
+            <option value="delete">Delete</option>
+        </select>
+        <div id="assignOptions" class="me-2" style="display:none;">
+            <select id="agentSelect" class="form-select">
+                <option value="">Select Agent</option>
+                <!-- Populate with agents from database -->
+                <option value="1">Agent 1</option>
+                <option value="2">Agent 2</option>
+            </select>
+        </div>
+        <div id="statusOptions" class="me-2" style="display:none;">
+            <select id="statusSelect" class="form-select">
+                <option value="">Select Status</option>
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+                <option value="closed">Closed</option>
+            </select>
+        </div>
+        <button id="applyBulkAction" class="btn btn-primary">Apply</button>
+    </div>
+</div>
+
+<!-- Add this JavaScript -->
+<script>
+    $(document).ready(function() {
+        // Show/hide secondary options based on bulk action selection
+        $('#bulkAction').change(function() {
+            $('#assignOptions, #statusOptions').hide();
+            if ($(this).val() === 'assign') {
+                $('#assignOptions').show();
+            } else if ($(this).val() === 'status') {
+                $('#statusOptions').show();
+            }
+        });
+        
+        // Handle bulk action submission
+        $('#applyBulkAction').click(function() {
+            var action = $('#bulkAction').val();
+            if (!action) {
+                alert('Please select an action');
+                return;
+            }
+            
+            var selectedTickets = [];
+            $('.update-checkbox:checked').each(function() {
+                selectedTickets.push($(this).val());
+            });
+            
+            if (selectedTickets.length === 0) {
+                alert('Please select at least one ticket');
+                return;
+            }
+            
+            var additionalData = {};
+            if (action === 'assign') {
+                additionalData.agentId = $('#agentSelect').val();
+                if (!additionalData.agentId) {
+                    alert('Please select an agent');
+                    return;
+                }
+            } else if (action === 'status') {
+                additionalData.status = $('#statusSelect').val();
+                if (!additionalData.status) {
+                    alert('Please select a status');
+                    return;
+                }
+            }
+            
+            // Send AJAX request to process bulk action
+            $.ajax({
+                url: '/tickets/bulk-action',
+                type: 'POST',
+                data: {
+                    action: action,
+                    tickets: selectedTickets,
+                    data: additionalData
+                },
+                success: function(response) {
+                    alert('Action applied successfully');
+                    location.reload();
+                },
+                error: function() {
+                    alert('Error applying bulk action');
+                }
+            });
+        });
+    });
+</script>
+```
+
+## 3. Responsive Design Improvements
+
+Enhance the mobile experience with responsive columns:
+
+```javascript
+$('#ticketsTable').DataTable({
+    responsive: {
+        details: {
+            display: $.fn.dataTable.Responsive.display.modal({
+                header: function(row) {
+                    var data = row.data();
+                    return 'Ticket: ' + data[1]; // Subject column
+                }
+            }),
+            renderer: $.fn.dataTable.Responsive.renderer.tableAll({
+                tableClass: 'table table-striped'
+            })
+        }
+    },
+    columnDefs: [
+        { responsivePriority: 1, targets: [1, 6] }, // Subject and Status are highest priority
+        { responsivePriority: 2, targets: [3, 4] }, // Assigned To and Created At are medium priority
+        { responsivePriority: 3, targets: [0, 2, 5, 7, 8] } // Other columns are lowest priority
+    ]
+});
+```
+
+## 4. State Saving
+
+Save the user's table state (sorting, filtering, pagination) between page loads:
+
+```javascript
+$('#ticketsTable').DataTable({
+    stateSave: true,
+    stateDuration: 60 * 60 * 24, // 1 day
+    stateSaveCallback: function(settings, data) {
+        localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data));
+    },
+    stateLoadCallback: function(settings) {
+        return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance));
+    }
+});
+```
+
+## 5. Row Details Expansion
+
+Add expandable rows to show more ticket details:
+
+```javascript
+$('#ticketsTable').DataTable({
+    responsive: true,
+    rowReorder: {
+        selector: 'td:nth-child(2)'
+    },
+    columnDefs: [
+        {
+            className: 'dtr-control',
+            orderable: false,
+            targets: 0
+        }
+    ],
+    order: [1, 'asc'],
+    // Add child row content
+    rowCallback: function(row, data) {
+        // Create the child row content
+        var childContent = '<div class="p-3">' +
+            '<h5>Ticket Details</h5>' +
+            '<div class="row">' +
+            '<div class="col-md-6"><strong>Full Description:</strong><br>' + data[2] + '</div>' +
+            '<div class="col-md-6">' +
+            '<strong>Ticket History:</strong><br>' +
+            '<ul class="list-group">' +
+            '<li class="list-group-item">Created: ' + data[4] + '</li>' +
+            '<li class="list-group-item">Last Updated: ' + data[5] + '</li>' +
+            '</ul>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+            
+        $(row).attr('data-child-content', childContent);
+    }
+});
+
+// Handle click on the first column to expand/collapse
+$('#ticketsTable').on('click', 'td.dtr-control', function() {
+    var tr = $(this).closest('tr');
+    var row = $('#ticketsTable').DataTable().row(tr);
+    
+    if (row.child.isShown()) {
+        row.child.hide();
+        tr.removeClass('shown');
+    } else {
+        row.child(tr.attr('data-child-content')).show();
+        tr.addClass('shown');
+    }
+});
+```
+
+## 6. Server-Side Processing
+
+For large datasets, implement server-side processing:
+
+```javascript
+$('#ticketsTable').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: '/api/tickets',
+        type: 'POST'
+    },
+    columns: [
+        { data: 'id' },
+        { data: 'subject' },
+        { data: 'description' },
+        { data: 'agent_name' },
+        { data: 'created_at' },
+        { data: 'updated_at' },
+        { data: 'status' },
+        { 
+            data: null,
+            render: function(data, type, row) {
+                return '<a href="update-ticket.php?id=' + row.id + '" class="btn btn-sm btn-primary update-icon" style="display:none;"><i class="fas fa-edit"></i></a>';
+            }
+        },
+        {
+            data: null,
+            render: function(data, type, row) {
+                return '<input type="checkbox" class="update-checkbox" name="ticket_id[]" value="' + row.id + '">';
+            }
+        }
+    ]
+});
+```
+
+## 7. Custom Styling
+
+Add custom styling to highlight different ticket statuses:
+
+```css
+/* Add this to your CSS */
+.status-open {
+    background-color: #fff3cd !important;
+}
+.status-in-progress {
+    background-color: #cfe2ff !important;
+}
+.status-resolved {
+    background-color: #d1e7dd !important;
+}
+.status-closed {
+    background-color: #f8f9fa !important;
+}
+
+/* Add this JavaScript */
+$('#ticketsTable').on('draw.dt', function() {
+    $('#ticketsTable tbody tr').each(function() {
+        var status = $(this).find('td:eq(6)').text().toLowerCase().replace(' ', '-');
+        $(this).addClass('status-' + status);
+    });
+});
+```
+
+These enhancements will significantly improve the user experience and functionality of your ticket management system while maintaining compatibility with your existing code structure.

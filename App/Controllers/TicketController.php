@@ -31,15 +31,9 @@ class TicketController
     public function index(): void
     {
 
-        $stats = [
-            'total' => $this->ticketModel->getTotalTickets(),
-            'today' => $this->ticketModel->getTicketsRaisedToday(),
-            'pending' => $this->ticketModel->getPendingTickets(),
-            'resolved' => $this->ticketModel->getResolvedTickets()
-        ];
+        $tickets = $this->ticketModel->getAll();
 
-
-        loadView('tickets/index', ['stats' => $stats]);
+        loadView('tickets/index', ['tickets' => $tickets]);
     }
 
 

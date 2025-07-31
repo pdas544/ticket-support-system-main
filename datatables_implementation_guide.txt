@@ -1,0 +1,114 @@
+# DataTables Implementation Guide
+
+## Including the Latest DataTables Library
+
+To implement the latest version of DataTables in your Ticket Support System, follow these steps:
+
+### 1. Include Required CSS Files
+
+Add the following CSS link in the header partial or directly in the view file:
+
+```html
+<!-- DataTables Bootstrap 5 CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+<!-- Optional: Responsive extension CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+```
+
+### 2. Include Required JavaScript Files
+
+Add the following JavaScript files before the closing body tag (in the footer partial or at the end of the view file):
+
+```html
+<!-- jQuery (required if not already included) -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<!-- DataTables Core JS -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<!-- DataTables Bootstrap 5 Integration -->
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<!-- Optional: Responsive extension JS -->
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+```
+
+### 3. Initialize DataTables
+
+Add the following JavaScript code to initialize DataTables:
+
+```javascript
+<script>
+    $(document).ready(function() {
+        $('#ticketsTable').DataTable({
+            responsive: true,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            columnDefs: [
+                { orderable: false, targets: [7, 8] } // Disable sorting for action and select columns
+            ]
+        });
+        
+        // Optional: Show/hide update icons when checkbox is checked
+        $(".update-checkbox").change(function() {
+            if($(this).is(":checked")) {
+                $(this).closest("tr").find(".update-icon").show();
+            } else {
+                $(this).closest("tr").find(".update-icon").hide();
+            }
+        });
+    });
+</script>
+```
+
+### 4. Verify jQuery Compatibility
+
+Ensure that you're not loading multiple versions of jQuery. If your application already includes jQuery, you can skip the jQuery inclusion in step 2.
+
+### 5. Additional DataTables Features (Optional)
+
+DataTables offers many additional features that you might find useful:
+
+1. **Export buttons**: Allow users to export data to CSV, Excel, PDF, etc.
+   ```html
+   <!-- Export Buttons CSS -->
+   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+   
+   <!-- Export Buttons JS -->
+   <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+   <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+   <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+   <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+   ```
+
+   Initialize with buttons:
+   ```javascript
+   $('#ticketsTable').DataTable({
+       responsive: true,
+       dom: 'Bfrtip',
+       buttons: [
+           'copy', 'csv', 'excel', 'pdf', 'print'
+       ]
+   });
+   ```
+
+2. **Fixed header**: Keep the header visible when scrolling through a large table
+   ```html
+   <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.bootstrap5.min.css">
+   <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
+   ```
+
+   Initialize with fixed header:
+   ```javascript
+   $('#ticketsTable').DataTable({
+       fixedHeader: true
+   });
+   ```
+
+### 6. Troubleshooting
+
+- If you encounter styling issues, ensure that Bootstrap 5 CSS is loaded before DataTables CSS
+- If DataTables functionality doesn't work, check the browser console for JavaScript errors
+- Ensure that jQuery is loaded before any DataTables JavaScript files
+
+For more information and documentation, visit the official DataTables website: https://datatables.net/
