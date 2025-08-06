@@ -49,12 +49,43 @@
             });
         }
         
+        // Keep dropdown menu expanded when submenu item is clicked
+        const submenuLinks = document.querySelectorAll('.sub-menu .nav-link');
+        submenuLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Prevent the default behavior that would collapse the dropdown
+                e.stopPropagation();
+                
+                // Find the parent submenu
+                const parentSubmenu = this.closest('.sub-menu');
+                if (parentSubmenu) {
+                    // Keep the parent submenu expanded
+                    const bsCollapse = bootstrap.Collapse.getInstance(parentSubmenu);
+                    if (bsCollapse) {
+                        // This prevents the collapse from happening
+                        setTimeout(() => {
+                            bsCollapse.show();
+                        }, 0);
+                    }
+                }
+            });
+        });
+        
         // Handle active state for sidebar links
         const currentPath = window.location.pathname;
         sidebarLinks.forEach(link => {
             const href = link.getAttribute('href');
             if (href && currentPath.includes(href) && href !== '/') {
                 link.classList.add('active');
+                
+                // If this is a submenu link, expand its parent dropdown
+                const parentSubmenu = link.closest('.sub-menu');
+                if (parentSubmenu) {
+                    const bsCollapse = new bootstrap.Collapse(parentSubmenu, {
+                        toggle: false
+                    });
+                    bsCollapse.show();
+                }
             }
             
             // Close sidebar when clicking a link on mobile

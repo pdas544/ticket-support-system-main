@@ -1,6 +1,9 @@
 <!-- Sidebar -->
 <!-- Sidebar Toggle Button (visible on mobile) -->
-<?php use App\Core\Session; ?>
+<?php use App\Core\Session;
+
+
+?>
 <button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target=".sidebar" 
         aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
     <i class="bi bi-list"></i>

@@ -30,7 +30,12 @@ class TicketController
      */
     public function index(): void
     {
-
+        /**
+         * 1) check the user type
+         * 2) if the user type is "admin" then get all tickets
+         * 3) if the user type is "agent" the get all tickets
+         * 4) if the user type is "guest"
+         */
         $tickets = $this->ticketModel->getAll();
 
         loadView('tickets/index', ['tickets' => $tickets]);
