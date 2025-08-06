@@ -1,13 +1,8 @@
 <!-- Sidebar -->
-<!-- Sidebar Toggle Button (visible on mobile) -->
 <?php use App\Core\Session; ?>
-<button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target=".sidebar" 
-        aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
-    <i class="bi bi-list"></i>
-</button>
 
-<!-- Sidebar -->
-<div class="sidebar collapse d-lg-block">
+<!-- Sidebar - always expanded -->
+<div class="sidebar">
         <div class="position-sticky">
             <nav class="nav flex-column">
                 <a href="/dashboard" class="nav-link d-flex align-items-center">

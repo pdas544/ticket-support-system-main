@@ -15,15 +15,7 @@
     border-right: 1px solid #dee2e6;
     overflow-y: auto;
     z-index: 1000;
-    transition: all 1s ease-in-out;
-}
-
-/* Sidebar toggle button */
-[data-bs-toggle="collapse"][data-bs-target=".sidebar"] {
-    position: fixed;
-    top: 65px;
-    left: 10px;
-    z-index: 1020;
+    /* Always visible - no transform or transition needed */
 }
 
 /* Sidebar navigation links */
@@ -74,22 +66,19 @@
 /* Main content adjustment */
 .main-content {
     margin-left: 250px;
-    transition: margin-left 0.3s ease-in-out;
+    width: calc(100% - 250px);
 }
 
 /* Responsive adjustments */
 @media (max-width: 991.98px) {
     .sidebar {
-        width: 100%;
-        margin-left: -100%;
+        width: 250px;
     }
     
-    .sidebar.show {
-        margin-left: 0;
-    }
-    
+    /* On mobile, sidebar overlays content */
     .main-content {
         margin-left: 0;
+        width: 100%;
     }
 }
 
