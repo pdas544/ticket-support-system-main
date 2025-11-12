@@ -12,16 +12,19 @@ The `ticket-support-system-main` is a robust PHP-based ticketing system designed
 - **Error Handling**: Centralized error handling and logging for better debugging.
 
 ## 🛠️ Tech Stack
+- **Front-End**: HTML, CSS, Bootstrap, JQuery
 - **Programming Language**: PHP
 - **Frameworks and Libraries**:
   - [AltoRouter](https://github.com/altorouter/altorouter)
   - [PHPMailer](https://github.com/PHPMailer/PHPMailer)
+  - DataTables - JS Library
 - **Database**: MySQL
 - **Version Control**: Git
 
 ## 📦 Installation
 
 ### Prerequisites
+- Bootstrap 5.3 or later
 - PHP 8.4.7 or later
 - MySQL 10.4.32 or later
 - Composer
@@ -42,36 +45,23 @@ The `ticket-support-system-main` is a robust PHP-based ticketing system designed
    - Create a new database and user in MySQL.
    - Import the `ticketing_support.sql` file into the database.
 
-4. Configure environment variables:
-   - Create a `.env` file in the root directory with the following content:
-     ```env
-     DB_HOST=localhost
-     DB_NAME=ticketing_support
-     DB_USER=root
-     DB_PASS=
-     ```
-
-5. Start the application:
+4. Start the application:
    ```bash
    php -S localhost:8000 -t public
    ```
 
-### Alternative Installation Methods
-- **Docker**: Use the provided Dockerfile to set up the application in a container.
-- **Composer**: Install the project using Composer.
-
 ## 🎯 Usage
 
 ### Basic Usage
-```php
-// Example: Creating a new ticket
-$ticket = new Ticket();
-$ticket->create($user_id, $subject, $description);
-```
+
+1) Use the Guest Menu -> Raise Ticket: Enter the Issue Details and Submit.-> Ticket Number is generated
+2) Use the Guest Menu -> Check Ticket Status -> Enter the generated ticket number to check the status
+3) New user can register and Sign-In with the given menu items.
 
 ### Advanced Usage
-- **Customizing Email Notifications**: Modify the `config/email.php` file to change email settings.
-- **Adding Custom Middleware**: Implement additional middleware for custom authentication or authorization logic.
+1) Perform CRUD operations on Tickets and Users using Admin Credentials
+email: admin@admin.com
+password: password
 
 ## 📁 Project Structure
 ```
@@ -106,21 +96,14 @@ ticket-support-system-main/
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👥 Authors & Contributors
-- **Maintainer**: [Your Name]
-- **Contributors**: [List of contributors]
+- **Maintainer**: Priyabrata Das
 
 
 ## 🗺️ Roadmap
 - **Planned Features**:
-  - Add Migration Support for securing end points
+  - Add Middleware Support for refining the Authorization Logic
   - Add support for database migrations.
-  - Enhance model validation.
-- **Known Issues**:
-  - [Issue 1](https://github.com/pdas544/ticket-support-system-main/issues/1)
-  - [Issue 2](https://github.com/pdas544/ticket-support-system-main/issues/2)
-- **Future Improvements**:
-  - Add support for categorizing tickets into severity levels as High, Normal, and Low.
-
+  - Add support JWT token for authentication instead of Sessions.
 
 ---
 
