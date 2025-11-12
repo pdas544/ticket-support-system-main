@@ -1,7 +1,10 @@
-# ticket-support-system-main
+# IT Desk - Ticket Support System
 
 ## 🚀 Overview
-The `ticket-support-system-main` is a robust PHP-based ticketing system designed to streamline IT support processes. This system allows users to create, view, and manage support tickets efficiently. It is ideal for organizations looking to enhance their IT support capabilities and improve customer satisfaction.
+- Modern PHP, MVC Based Ticket Support System for efficient management of IT Support Tickets.
+- Clean and Minimal UI using Bootstrap.
+- Session based authentication
+- JS based DataTable for searching, ordering and pagination of the rendered PHP Output.
 
 ## ✨ Features
 - **User Authentication**: Secure login and registration for users and agents.
